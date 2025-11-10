@@ -1,6 +1,5 @@
 <?php
 include("Model.php");
-include("../connection/connection.php");
 
 class Car extends Model {
     private int $id;
@@ -40,12 +39,11 @@ class Car extends Model {
     public function __toString(){
         return $this->id . " | " . $this->name . " | " . $this->year. " | " . $this->color;
     }
+    
+    public function toArray(){
+        return ["id" => $this->id, "name" => $this->name, "year" => $this->year, "color" => $this->color];
+    }
 
 }
-
-
-//Main Class
-$car = Car::find($connection, 1);
-print($car);
 
 ?>
