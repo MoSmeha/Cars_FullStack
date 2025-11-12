@@ -5,25 +5,38 @@ require_once(__DIR__ . "/../services/ResponseService.php");
 
 class CarController {
 
-    function getCarByID(){
+    function getCars(){
         global $connection;
-
-        if(isset($_GET["id"])){
+        try {
+            if(isset($_GET["id"])){
             $id = $_GET["id"];
-        }else{
-            echo ResponseService::response(500, "ID is missing");
+            $car = Car::find($connection, $id);
+            if(!$car){
+            echo ResponseService::response(404, "No car found with this id");
+            } else{
+            echo ResponseService::response(200, $car->toArray());
+            }
+
             return;
-        }
+            }
+            $allCars = Car::findAll($connection);
+            $carList = [];
+            foreach($allCars as $car){
+                $carList[] = $car->toArray();
+            }
+            echo ResponseService::response(200, $carList);
+            } catch(Exception $e) {
+                echo 'Error in fetching Cars : ' .$e->getMessage();
+            }
        
-        //not allowed to write logic in my controller!!!
-        //$car = Car::find($connection, $id);
-        //$car = $car ? $car->toArray() : [];
-        $car = CarService::findCarByID($id);
-        echo ResponseService::response(200, $car);
+        // not allowed to write logic in my controller!!!
+
         return;
     }
 
     //try catch 
-}
 
+}
+$controller = new CarController();
+$controller->getCars();
 ?>
