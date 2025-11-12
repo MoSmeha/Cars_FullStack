@@ -2,28 +2,21 @@
 require_once(__DIR__ . "/../models/Car.php");
 require_once(__DIR__ . "/../connection/connection.php");
 require_once(__DIR__ . "/../services/ResponseService.php");
-
+require_once(__DIR__ . "/../services/CarServices.php");
 class CarController {
 
-    function getCarByID(){
+    function getCars(){
         global $connection;
-
-        if(isset($_GET["id"])){
+            if(isset($_GET["id"])){
             $id = $_GET["id"];
-        }else{
-            echo ResponseService::response(500, "ID is missing");
-            return;
+            }else{
+                $id=null;
+            }
+            echo CarService::getCars($connection,$id);
+            
         }
-       
-        //not allowed to write logic in my controller!!!
-        //$car = Car::find($connection, $id);
-        //$car = $car ? $car->toArray() : [];
-        $car = CarService::findCarByID($id);
-        echo ResponseService::response(200, $car);
-        return;
-    }
-
-    //try catch 
 }
 
+$controller = new CarController();
+$controller->getCars();
 ?>
